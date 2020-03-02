@@ -1,6 +1,8 @@
 
 import { get, post } from '../../utils/request';
 import url from '../../utils/url';
+import { FETCH_DATA } from '../middlewares/api';
+import { schema } from './entities/products';
 
 // define actiontypes
 export const types = {
@@ -10,6 +12,7 @@ export const types = {
 
 };
 
+/*
 const fetchLikesRequest = () => ({
   type: types.FETCH_LIKES_REQUEST
 });
@@ -24,8 +27,30 @@ const fetchLikesFailure = (error) => ({
   error
 });
 
+*/
+
+const fetchLikes = ( endpoint ) => ({
+  [FETCH_DATA]: {
+    types: [
+      types.FETCH_LIKES_REQUEST,
+      types.FETCH_LIKES_SUCCESS,
+      types.FETCH_LIKES_FAILURE
+    ],
+    endpoint,
+    schema
+  },
+  // params, // 希望后面的参数被next接收到
+})
+
 // define actions
 export const actions = {
+  loadLikes: () => {
+    return (dispatch, getState) => {
+      const endpoint = url.getProductList(0, 10);
+      return dispatch(fetchLikes(endpoint))
+    }
+  },
+  /*
   loadLikes: () => {
     return (dispatch, getState) => {
       dispatch(fetchLikesRequest());
@@ -40,6 +65,7 @@ export const actions = {
       )
     } 
   }
+  */
 };
 
 
